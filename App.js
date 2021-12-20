@@ -7,8 +7,24 @@ export default function App() {
 
   const [item, setItem] = useState();
   const [itemList, setItemList] =useState([]);
+  const [finishedItemList,setFinishedItemList]=useState([]);
 
+  const moveItem=(inHandleliste, index)=>{
+    if(inHandleliste){
+      let newList=[...itemList];
+      let moveItem=newList.splice(index,1);
+      setItemList(newList);
 
+      setFinishedItemList([...finishedItemList,moveItem]);
+    }
+    else{
+      let newList=[...finishedItemList];
+      let moveItem=newList.splice(index,1);
+      setFinishedItemList(newList);
+
+      setItemList([...itemList,moveItem]);
+    }
+  }
 
   const handleAddItem=()=>{
     setItemList([...itemList,item]);
@@ -36,7 +52,7 @@ export default function App() {
           {/* Dette er hvor alle handlelisteitems skal gå */}
           {
             itemList.map((item,index)=>
-              <TouchableOpacity key={index} onPress={()=>handleRemoveItem(index)}>
+              <TouchableOpacity key={index} onPress={()=>moveItem(true, index)}>
                 <Item text={item}/>
               </TouchableOpacity>
             )
@@ -44,6 +60,22 @@ export default function App() {
 
         </View>
       </View>
+
+      <View style={styles.wrapper}>
+      <Text style={styles.title}>Ferdig Handlet</Text>
+        <View>
+          {/* Dette er hvor ting som er handlet skal være */}
+          {
+            finishedItemList.map((item,index)=>
+              <TouchableOpacity key={index} onPress={()=>moveItem(false, index)}>
+                <Item text={item}/>
+              </TouchableOpacity>
+            )
+          }
+
+        </View>
+      </View>
+
       <KeyboardAvoidingView
         behavior={Platform.OS==='ios' ? 'padding' : 'height'}
         style={styles.inputWrapper}
