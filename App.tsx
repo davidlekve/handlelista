@@ -5,9 +5,9 @@ import Item from './components/Item.js';
 
 export default function App() {
 
-  const [item, setItem] = useState();
-  const [itemList, setItemList] =useState([]);
-  const [finishedItemList,setFinishedItemList]=useState([]);
+  const [item, setItem] = useState<string>();
+  const [itemList, setItemList] =useState<string[]>([]);
+  const [finishedItemList,setFinishedItemList]=useState<string[]>([]);
 
   const moveItem=(inHandleliste, index)=>{
     if(inHandleliste){
@@ -15,20 +15,20 @@ export default function App() {
       let moveItem=newList.splice(index,1);
       setItemList(newList);
 
-      setFinishedItemList([...finishedItemList,moveItem]);
+      setFinishedItemList(finishedItemList.concat(moveItem));
     }
     else{
       let newList=[...finishedItemList];
       let moveItem=newList.splice(index,1);
       setFinishedItemList(newList);
 
-      setItemList([...itemList,moveItem]);
+      setItemList(itemList.concat(moveItem));
     }
   }
 
   const handleAddItem=()=>{
-    setItemList([...itemList,item]);
-    setItem(null);
+    setItemList(item ? itemList.concat(item) : itemList.concat(''));
+    setItem('');
   };
 
   const handleRemoveItem=(index)=>{
@@ -81,7 +81,7 @@ export default function App() {
         style={styles.inputWrapper}
       >
         <TextInput style={styles.input}
-          placeholder='Legg til i handlelista' value={item}
+          placeholder='Legg til i handlelista' value={item? item:''}
           onChangeText={text => setItem (text)}
           onKeyPress={e => handleKeyPress(e)}
           />
